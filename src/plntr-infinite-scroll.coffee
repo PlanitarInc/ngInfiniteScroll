@@ -1,16 +1,17 @@
-mod = angular.module('infinite-scroll', [])
+mod = angular.module('plntr-infinite-scroll', [])
 
 mod.value('THROTTLE_MILLISECONDS', null)
 
-mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE_MILLISECONDS', \
+mod.directive 'plntrInfiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE_MILLISECONDS', \
                                   ($rootScope, $window, $interval, THROTTLE_MILLISECONDS) ->
   scope:
-    infiniteScroll: '&'
-    infiniteScrollContainer: '='
-    infiniteScrollDistance: '='
-    infiniteScrollDisabled: '='
-    infiniteScrollUseDocumentBottom: '=',
-    infiniteScrollListenForEvent: '@'
+    plntrInfiniteScroll: '&'
+    plntrInfiniteScrollContainer: '='
+    plntrInfiniteScrollDistance: '='
+    plntrInfiniteScrollDisabled: '='
+    plntrInfiniteScrollUseDocumentBottom: '='
+    plntrInfiniteScrollListenForEvent: '@'
+    plntrInfiniteScrollDirection: '='
 
   link: (scope, elem, attrs) ->
     windowElement = angular.element($window)
@@ -26,19 +27,29 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
 
     height = (elem) ->
       elem = elem[0] or elem
-
       if isNaN(elem.offsetHeight) then elem.document.documentElement.clientHeight else elem.offsetHeight
+
+    width = (elem) ->
+      elem = elem[0] or elem
+      if isNaN(elem.offsetWidth) then elem.document.documentElement.clientWidth else elem.offsetWidth
 
     offsetTop = (elem) ->
       if not elem[0].getBoundingClientRect or elem.css('none')
         return
-
       elem[0].getBoundingClientRect().top + pageYOffset(elem)
+
+    offsetLeft = (elem) ->
+      if not elem[0].getBoundingClientRect or elem.css('none')
+        return
+      elem[0].getBoundingClientRect().left + pageXOffset(elem)
 
     pageYOffset = (elem) ->
       elem = elem[0] or elem
-
       if isNaN(window.pageYOffset) then elem.document.documentElement.scrollTop else elem.ownerDocument.defaultView.pageYOffset
+
+    pageXOffset = (elem) ->
+      elem = elem[0] or elem
+      if isNaN(window.pageXOffset) then elem.document.documentElement.scrollLeft else elem.ownerDocument.defaultView.pageXOffset
 
     # infinite-scroll specifies a function to call when the window,
     # or some other container specified by infinite-scroll-container,
@@ -47,30 +58,40 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
     # with a boolean that is set to true when the function is
     # called in order to throttle the function call.
     handler = ->
-      if container == windowElement
-        containerBottom = height(container) + pageYOffset(container[0].document.documentElement)
-        elementBottom = offsetTop(elem) + height(elem)
-      else
-        containerBottom = height(container)
-        containerTopOffset = 0
-        if offsetTop(container) != undefined
-          containerTopOffset = offsetTop(container)
-        elementBottom = offsetTop(elem) - containerTopOffset + height(elem)
+      if scope.plntrInfiniteScrollDirection == 'vertical'
+        if container == windowElement
+          containerEnd = height(container) + pageYOffset(container[0].document.documentElement)
+          elementEnd = offsetTop(elem) + height(elem)
+        else
+          containerEnd = height(container)
+          containerTopOffset = 0
+          if offsetTop(container) != undefined
+            containerTopOffset = offsetTop(container)
+          elementEnd = offsetTop(elem) - containerTopOffset + height(elem)
+      else if scope.plntrInfiniteScrollDirection == 'horizontal'
+        if container == windowElement
+          containerEnd = width(container) + pageXOffset(container[0].document.documentElement)
+          elementEnd = offsetLeft(elem) + width(elem)
+        else
+          containerEnd = width(container)
+          containerLeftOffset = 0
+          if offsetLeft(container) != undefined
+            containerLeftOffset = offsetLeft(container)
+          elementEnd = offsetLeft(elem) - containerLeftOffset + width(elem)
 
       if(useDocumentBottom)
-        elementBottom = height((elem[0].ownerDocument || elem[0].document).documentElement)
+        elementEnd = height((elem[0].ownerDocument || elem[0].document).documentElement)
 
-      remaining = elementBottom - containerBottom
+      remaining = elementEnd - containerEnd
       shouldScroll = remaining <= height(container) * scrollDistance + 1
 
       if shouldScroll
         checkWhenEnabled = true
-
         if scrollEnabled
           if scope.$$phase || $rootScope.$$phase
-            scope.infiniteScroll()
+            scope.plntrInfiniteScroll()
           else
-            scope.$apply(scope.infiniteScroll)
+            scope.$apply(scope.plntrInfiniteScroll)
       else
         if checkInterval then $interval.cancel checkInterval
         checkWhenEnabled = false
@@ -108,7 +129,7 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
       if unregisterEventListener?
         unregisterEventListener()
         unregisterEventListener = null
-      if checkInterval 
+      if checkInterval
         $interval.cancel checkInterval
 
     # infinite-scroll-distance specifies how close to the bottom of the page
@@ -121,7 +142,7 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
 
     scope.$watch 'infiniteScrollDistance', handleInfiniteScrollDistance
     # If I don't explicitly call the handler here, tests fail. Don't know why yet.
-    handleInfiniteScrollDistance scope.infiniteScrollDistance
+    handleInfiniteScrollDistance scope.plntrInfiniteScrollDistance
 
     # infinite-scroll-disabled specifies a boolean that will keep the
     # infnite scroll function from being called; this is useful for
@@ -137,7 +158,7 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
 
     scope.$watch 'infiniteScrollDisabled', handleInfiniteScrollDisabled
     # If I don't explicitly call the handler here, tests fail. Don't know why yet.
-    handleInfiniteScrollDisabled scope.infiniteScrollDisabled
+    handleInfiniteScrollDisabled scope.plntrInfiniteScrollDisabled
 
     # use the bottom of the document instead of the element's bottom.
     # This useful when the element does not have a height due to its
@@ -146,7 +167,7 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
       useDocumentBottom = v
 
     scope.$watch 'infiniteScrollUseDocumentBottom', handleInfiniteScrollUseDocumentBottom
-    handleInfiniteScrollUseDocumentBottom scope.infiniteScrollUseDocumentBottom
+    handleInfiniteScrollUseDocumentBottom scope.plntrinfiniteScrollUseDocumentBottom
 
     # infinite-scroll-container sets the container which we want to be
     # infinte scrolled, instead of the whole window. Must be an
@@ -162,8 +183,8 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
 
     changeContainer windowElement
 
-    if scope.infiniteScrollListenForEvent
-      unregisterEventListener = $rootScope.$on scope.infiniteScrollListenForEvent, handler
+    if scope.plntrInfiniteScrollListenForEvent
+      unregisterEventListener = $rootScope.$on scope.plntrInfiniteScrollListenForEvent, handler
 
     handleInfiniteScrollContainer = (newContainer) ->
       # TODO: For some reason newContainer is sometimes null instead
@@ -187,7 +208,7 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
         throw new Error("invalid infinite-scroll-container attribute.")
 
     scope.$watch 'infiniteScrollContainer', handleInfiniteScrollContainer
-    handleInfiniteScrollContainer(scope.infiniteScrollContainer or [])
+    handleInfiniteScrollContainer(scope.plntrInfiniteScrollContainer or [])
 
     # infinite-scroll-parent establishes this element's parent as the
     # container infinitely scrolled instead of the whole window.

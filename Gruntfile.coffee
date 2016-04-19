@@ -46,13 +46,13 @@ module.exports = (grunt) ->
         banner: '<%= meta.banner %>'
       dist:
         src: 'compile/**/*.js'
-        dest: 'build/ng-infinite-scroll.js'
+        dest: 'build/plntr-infinite-scroll.js'
     uglify:
       options:
         banner: '<%= meta.banner %>'
       dist:
-        src: ['build/ng-infinite-scroll.js']
-        dest: 'build/ng-infinite-scroll.min.js'
+        src: ['build/plntr-infinite-scroll.js']
+        dest: 'build/plntr-infinite-scroll.min.js'
     connect:
       testserver:
         options:
