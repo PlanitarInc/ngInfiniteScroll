@@ -11,9 +11,9 @@ getTemplate = (angularVersion, container, attrs, throttle) ->
         }
       </style>
       <script src='http://ajax.googleapis.com/ajax/libs/angularjs/#{angularVersion}/angular.min.js'></script>
-      <script src="../../build/ng-infinite-scroll.js"></script>
+      <script src="../../build/plntr-infinite-scroll.js"></script>
       <script>
-        angular.module('app', ['infinite-scroll'])
+        angular.module('app', ['plntr-infinite-scroll'])
           .config(function ($provide) {
             $provide.value('THROTTLE_MILLISECONDS', #{throttle});
           })
@@ -40,7 +40,7 @@ getTemplate = (angularVersion, container, attrs, throttle) ->
       <a id="force" ng-click="loadMore()">Force</a>
       <a id="trigger" ng-click="triggerEvent()">Trigger</a>
       #{containers[container].start}
-        <div infinite-scroll="loadMore()" #{containers[container].attr} #{attrs}>
+        <div plntr-infinite-scroll="loadMore()" #{containers[container].attr} #{attrs}>
           <p ng-repeat='item in items track by $index'>
             {{$index}}
           </p>
@@ -57,11 +57,11 @@ containers =
   parent:
     start: "<div id='parent' style='height: 50%; overflow: auto;'>"
     end: "</div>"
-    attr: "infinite-scroll-parent"
+    attr: "plntr-infinite-scroll-parent"
   ancestor:
     start: "<div id='ancestor' style='height: 50%; overflow: auto;'><div>"
     end: "</div></div>"
-    attr: "infinite-scroll-container='\"#ancestor\"'"
+    attr: "plntr-infinite-scroll-container='\"#ancestor\"'"
 
 getElementByIdScript = (id) ->
   "document.getElementById('#{id}')"
@@ -104,7 +104,7 @@ getItems = ->
 tmpDir = ".tmp"
 pathToDocument = "#{tmpDir}/index.html"
 
-describe "ng-infinite-scroll", ->
+describe "plntr-plntr-infinite-scroll", ->
   for angularVersion in ["1.2.0", "1.3.4"]
     describe "with Angular #{angularVersion}", ->
       for container in ["window", "ancestor", "parent"]
@@ -125,8 +125,8 @@ describe "ng-infinite-scroll", ->
               browser.driver.executeScript(scrollToBottomScript(container))
               expect(getItems().count()).toBe 200
 
-            it "does not trigger immediately when infinite-scroll-immediate-check is false", ->
-              replaceIndexFile "infinite-scroll-immediate-check='false'", throttle
+            it "does not trigger immediately when plntr-infinite-scroll-immediate-check is false", ->
+              replaceIndexFile "plntr-infinite-scroll-immediate-check='false'", throttle
               browser.get pathToDocument
               expect(getItems().count()).toBe 0
               element(By.id("force")).click()
@@ -135,14 +135,14 @@ describe "ng-infinite-scroll", ->
               expect(getItems().count()).toBe 200
 
             it "respects the disabled attribute", ->
-              replaceIndexFile "infinite-scroll-disabled='busy'", throttle
+              replaceIndexFile "plntr-infinite-scroll-disabled='busy'", throttle
               browser.get pathToDocument
               expect(getItems().count()).toBe 0
               element(By.id("action")).click()
               expect(getItems().count()).toBe 100
 
-            it "respects the infinite-scroll-distance attribute", ->
-              replaceIndexFile "infinite-scroll-distance='1'", throttle
+            it "respects the plntr-infinite-scroll-distance attribute", ->
+              replaceIndexFile "plntr-infinite-scroll-distance='1'", throttle
               browser.get pathToDocument
               expect(getItems().count()).toBe 100
               browser.driver.executeScript(scrollToLastScreenScript(container, -20))
@@ -153,7 +153,7 @@ describe "ng-infinite-scroll", ->
             describe "with an event handler", ->
 
               it "calls the event handler on an event", ->
-                replaceIndexFile "infinite-scroll-listen-for-event='anEvent'", throttle
+                replaceIndexFile "plntr-infinite-scroll-listen-for-event='anEvent'", throttle
                 browser.get pathToDocument
                 expect(getItems().count()).toBe 100
                 browser.driver.executeScript(collapseItemsScript(container))
@@ -174,15 +174,15 @@ describe "ng-infinite-scroll", ->
               browser.sleep(throttle)
               expect(getItems().count()).toBe 200
 
-            it "does not trigger immediately when infinite-scroll-immediate-check is false", ->
-              replaceIndexFile "infinite-scroll-immediate-check='false'", throttle
+            it "does not trigger immediately when plntr-infinite-scroll-immediate-check is false", ->
+              replaceIndexFile "plntr-infinite-scroll-immediate-check='false'", throttle
               browser.get pathToDocument
               expect(getItems().count()).toBe 0
               element(By.id("force")).click()
               expect(getItems().count()).toBe 100
 
             it "respects the disabled attribute and is throttled when page loads", ->
-              replaceIndexFile "infinite-scroll-disabled='busy'", throttle
+              replaceIndexFile "plntr-infinite-scroll-disabled='busy'", throttle
               browser.get pathToDocument
               expect(getItems().count()).toBe 0
               element(By.id("action")).click()
@@ -191,15 +191,15 @@ describe "ng-infinite-scroll", ->
               expect(getItems().count()).toBe 100
 
             it "is not throttled when re-enabled if the throttle time has already elapsed", ->
-              replaceIndexFile "infinite-scroll-disabled='busy'", throttle
+              replaceIndexFile "plntr-infinite-scroll-disabled='busy'", throttle
               browser.get pathToDocument
               expect(getItems().count()).toBe 0
               browser.sleep(throttle)
               element(By.id("action")).click()
               expect(getItems().count()).toBe 100
 
-            it "respects the infinite-scroll-distance attribute", ->
-              replaceIndexFile "infinite-scroll-distance='1'", throttle
+            it "respects the plntr-infinite-scroll-distance attribute", ->
+              replaceIndexFile "plntr-infinite-scroll-distance='1'", throttle
               browser.get pathToDocument
               expect(getItems().count()).toBe 100
               browser.driver.executeScript(scrollToLastScreenScript(container, 20))
@@ -210,7 +210,7 @@ describe "ng-infinite-scroll", ->
             describe "with an event handler", ->
 
               it "calls the event handler on an event", ->
-                replaceIndexFile "infinite-scroll-listen-for-event='anEvent'", throttle
+                replaceIndexFile "plntr-infinite-scroll-listen-for-event='anEvent'", throttle
                 browser.get pathToDocument
                 expect(getItems().count()).toBe 100
                 browser.driver.executeScript(collapseItemsScript(container))

@@ -140,7 +140,7 @@ mod.directive 'plntrInfiniteScroll', ['$rootScope', '$window', '$interval', 'THR
     handleInfiniteScrollDistance = (v) ->
       scrollDistance = parseFloat(v) or 0
 
-    scope.$watch 'infiniteScrollDistance', handleInfiniteScrollDistance
+    scope.$watch 'plntrInfiniteScrollDistance', handleInfiniteScrollDistance
     # If I don't explicitly call the handler here, tests fail. Don't know why yet.
     handleInfiniteScrollDistance scope.plntrInfiniteScrollDistance
 
@@ -156,7 +156,7 @@ mod.directive 'plntrInfiniteScroll', ['$rootScope', '$window', '$interval', 'THR
         checkWhenEnabled = false
         handler()
 
-    scope.$watch 'infiniteScrollDisabled', handleInfiniteScrollDisabled
+    scope.$watch 'plntrInfiniteScrollDisabled', handleInfiniteScrollDisabled
     # If I don't explicitly call the handler here, tests fail. Don't know why yet.
     handleInfiniteScrollDisabled scope.plntrInfiniteScrollDisabled
 
@@ -166,7 +166,7 @@ mod.directive 'plntrInfiniteScroll', ['$rootScope', '$window', '$interval', 'THR
     handleInfiniteScrollUseDocumentBottom = (v) ->
       useDocumentBottom = v
 
-    scope.$watch 'infiniteScrollUseDocumentBottom', handleInfiniteScrollUseDocumentBottom
+    scope.$watch 'plntrInfiniteScrollUseDocumentBottom', handleInfiniteScrollUseDocumentBottom
     handleInfiniteScrollUseDocumentBottom scope.plntrinfiniteScrollUseDocumentBottom
 
     # infinite-scroll-container sets the container which we want to be
@@ -207,7 +207,7 @@ mod.directive 'plntrInfiniteScroll', ['$rootScope', '$window', '$interval', 'THR
       else
         throw new Error("invalid infinite-scroll-container attribute.")
 
-    scope.$watch 'infiniteScrollContainer', handleInfiniteScrollContainer
+    scope.$watch 'plntrInfiniteScrollContainer', handleInfiniteScrollContainer
     handleInfiniteScrollContainer(scope.plntrInfiniteScrollContainer or [])
 
     # infinite-scroll-parent establishes this element's parent as the

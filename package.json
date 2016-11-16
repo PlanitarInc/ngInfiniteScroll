@@ -1,10 +1,10 @@
 {
   "name": "plntr-infinite-scroll",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Infinite scrolling for AngularJS",
   "repository": {
     "type": "git",
-    "url": "git://github.com/sroze/ngInfiniteScroll.git"
+    "url": "git://github.com/PlanitarInc/ngInfiniteScroll.git"
   },
   "main": "build/plntr-infinite-scroll.js",
   "browser": "build/plntr-infinite-scroll.js",

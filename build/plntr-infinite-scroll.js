@@ -1,4 +1,4 @@
-/* plntr-infinite-scroll - v1.2.1 - 2016-04-19 */
+/* plntr-infinite-scroll - v1.2.2 - 2016-11-16 */
 var mod;
 
 mod = angular.module('plntr-infinite-scroll', []);
@@ -162,7 +162,7 @@ mod.directive('plntrInfiniteScroll', [
         handleInfiniteScrollDistance = function(v) {
           return scrollDistance = parseFloat(v) || 0;
         };
-        scope.$watch('infiniteScrollDistance', handleInfiniteScrollDistance);
+        scope.$watch('plntrInfiniteScrollDistance', handleInfiniteScrollDistance);
         handleInfiniteScrollDistance(scope.plntrInfiniteScrollDistance);
         handleInfiniteScrollDisabled = function(v) {
           scrollEnabled = !v;
@@ -171,12 +171,12 @@ mod.directive('plntrInfiniteScroll', [
             return handler();
           }
         };
-        scope.$watch('infiniteScrollDisabled', handleInfiniteScrollDisabled);
+        scope.$watch('plntrInfiniteScrollDisabled', handleInfiniteScrollDisabled);
         handleInfiniteScrollDisabled(scope.plntrInfiniteScrollDisabled);
         handleInfiniteScrollUseDocumentBottom = function(v) {
           return useDocumentBottom = v;
         };
-        scope.$watch('infiniteScrollUseDocumentBottom', handleInfiniteScrollUseDocumentBottom);
+        scope.$watch('plntrInfiniteScrollUseDocumentBottom', handleInfiniteScrollUseDocumentBottom);
         handleInfiniteScrollUseDocumentBottom(scope.plntrinfiniteScrollUseDocumentBottom);
         changeContainer = function(newContainer) {
           if (container != null) {
@@ -208,7 +208,7 @@ mod.directive('plntrInfiniteScroll', [
             throw new Error("invalid infinite-scroll-container attribute.");
           }
         };
-        scope.$watch('infiniteScrollContainer', handleInfiniteScrollContainer);
+        scope.$watch('plntrInfiniteScrollContainer', handleInfiniteScrollContainer);
         handleInfiniteScrollContainer(scope.plntrInfiniteScrollContainer || []);
         if (attrs.infiniteScrollParent != null) {
           changeContainer(angular.element(elem.parent()));
