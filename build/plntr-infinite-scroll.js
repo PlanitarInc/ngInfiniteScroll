@@ -45,13 +45,13 @@ mod.directive('plntrInfiniteScroll', [
           }
         };
         offsetTop = function(elem) {
-          if (!elem[0].getBoundingClientRect || elem.css('none')) {
+          if (!elem[0].getBoundingClientRect) {
             return;
           }
           return elem[0].getBoundingClientRect().top + pageYOffset(elem);
         };
         offsetLeft = function(elem) {
-          if (!elem[0].getBoundingClientRect || elem.css('none')) {
+          if (!elem[0].getBoundingClientRect) {
             return;
           }
           return elem[0].getBoundingClientRect().left + pageXOffset(elem);
