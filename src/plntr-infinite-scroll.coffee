@@ -34,12 +34,12 @@ mod.directive 'plntrInfiniteScroll', ['$rootScope', '$window', '$interval', 'THR
       if isNaN(elem.offsetWidth) then elem.document.documentElement.clientWidth else elem.offsetWidth
 
     offsetTop = (elem) ->
-      if not elem[0].getBoundingClientRect or elem.css('none')
+      if not elem[0].getBoundingClientRect
         return
       elem[0].getBoundingClientRect().top + pageYOffset(elem)
 
     offsetLeft = (elem) ->
-      if not elem[0].getBoundingClientRect or elem.css('none')
+      if not elem[0].getBoundingClientRect
         return
       elem[0].getBoundingClientRect().left + pageXOffset(elem)
 
