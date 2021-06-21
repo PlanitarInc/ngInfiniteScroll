@@ -1,4 +1,4 @@
-/* plntr-infinite-scroll - v1.2.2 - 2016-11-16 */
+/* plntr-infinite-scroll - v1.2.3 - 2021-06-21 */
 var mod;
 
 mod = angular.module('plntr-infinite-scroll', []);
